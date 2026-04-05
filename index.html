@@ -1320,14 +1320,31 @@ function handleSubmit() {
     data[k] = checkboxGroups[k].join(',');
   });
 
-  // Convert Likert and Satisfaction values to integers
-  Object.keys(data).forEach(key => {
-    const isLikert = LIKERT_PREFIXES.some(p => key.startsWith(p));
-    const isSatisfaction = key === 'Satisfaction';
-    if ((isLikert || isSatisfaction) && data[key] !== '') {
-      const num = parseInt(data[key], 10);
-      if (!isNaN(num)) data[key] = num;
+  // Ensure all Likert fields exist and convert to numbers
+  const allLikertFields = [
+    'Beh_FBA','Beh_BIP','Beh_DeEsc','Beh_PCM','Beh_TIC','Beh_PBIS',
+    'Beh_Restorative','Beh_DataCollection','Beh_TBAStrategies','Beh_Transitions',
+    'Beh_AntiBullying','Beh_SuicideRisk','Beh_Elopement','Beh_MedEmergency',
+    'Cls_Differentiation','Cls_Environment','Cls_AccommodMod','Cls_SEL',
+    'Cls_AssistTech','Cls_ProgressMon','Cls_CoTeach','Cls_PBL',
+    'IEP_GoalWriting','IEP_TeacherCollab','IEP_Caseload','IEP_ServiceModels',
+    'IEP_ProgressMon','IEP_FamilyCoord','IEP_Timelines',
+    'Comp_MandatedReporter','Comp_FERPA','Comp_Restraint','Comp_SPEDLaw',
+    'Comp_CARF','Comp_IncidentReport','Comp_MedAdmin',
+    'Prof_Boundaries','Prof_FamilyComm','Prof_CulturalDEI','Prof_Teamwork',
+    'Prof_CompassionFatigue','Prof_Safety','Prof_Technology','Prof_TimeMgmt',
+    'Prof_EscalatedFamily','Satisfaction'
+  ];
+  allLikertFields.forEach(key => {
+    if (data[key] !== undefined && data[key] !== '') {
+      data[key] = parseInt(data[key], 10);
+    } else {
+      data[key] = null;
     }
+  });
+  // Ensure text fields default to empty string
+  ['AgeGroups','Credentials','PreferredFormat','OpenTopic','Onboarding_GapTopics','OpenComments','Priority1','Priority2','Priority3'].forEach(key => {
+    if (!data[key]) data[key] = '';
   });
 
   // Loading state
