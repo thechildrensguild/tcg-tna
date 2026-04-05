@@ -1339,7 +1339,7 @@ function handleSubmit() {
     if (data[key] !== undefined && data[key] !== '') {
       data[key] = parseInt(data[key], 10);
     } else {
-      data[key] = null;
+      data[key] = 0;
     }
   });
   // Ensure text fields default to empty string
