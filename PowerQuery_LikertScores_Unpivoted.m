@@ -24,7 +24,7 @@ let
 
         // Compliance
         "Comp_MandatedReporter", "Comp_FERPA", "Comp_Restraint",
-        "Comp_SPEDLaw", "Comp_HIPAA", "Comp_COMAR", "Comp_OSSE",
+        "Comp_SPEDLaw", "Comp_HIPAA", "Comp_Regulatory",
         "Comp_Documentation", "Comp_IncidentReport", "Comp_MedAdmin",
 
         // Professional
@@ -97,8 +97,7 @@ let
         else if [TopicCode] = "Comp_Restraint" then "Restraint"
         else if [TopicCode] = "Comp_SPEDLaw" then "SPED Law"
         else if [TopicCode] = "Comp_HIPAA" then "HIPAA"
-        else if [TopicCode] = "Comp_COMAR" then "COMAR / MSDE Regulations"
-        else if [TopicCode] = "Comp_OSSE" then "OSSE / DCPS Regulations"
+        else if [TopicCode] = "Comp_Regulatory" then "COMAR / MSDE & OSSE / DCPS Regulations"
         else if [TopicCode] = "Comp_Documentation" then "Documentation & Record Keeping"
         else if [TopicCode] = "Comp_IncidentReport" then "Incident Reporting"
         else if [TopicCode] = "Comp_MedAdmin" then "Medication Administration"

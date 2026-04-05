@@ -20,8 +20,7 @@ Add-PnPField -List "TNAResponses" -DisplayName "Transition Planning" -InternalNa
 
 # --- New Likert columns (Compliance) — replace CARF ---
 Add-PnPField -List "TNAResponses" -DisplayName "HIPAA" -InternalName "Comp_HIPAA" -Type Number
-Add-PnPField -List "TNAResponses" -DisplayName "COMAR/MSDE Regulations" -InternalName "Comp_COMAR" -Type Number
-Add-PnPField -List "TNAResponses" -DisplayName "OSSE/DCPS Regulations" -InternalName "Comp_OSSE" -Type Number
+Add-PnPField -List "TNAResponses" -DisplayName "Regulatory (COMAR/OSSE)" -InternalName "Comp_Regulatory" -Type Number
 Add-PnPField -List "TNAResponses" -DisplayName "Documentation" -InternalName "Comp_Documentation" -Type Number
 
 # --- New Likert columns (Professional) ---
