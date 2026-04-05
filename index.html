@@ -228,6 +228,8 @@ textarea { resize: vertical; min-height: 80px; }
 }
 
 .checkbox-group { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.checkbox-columns { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 6px; }
+.checkbox-columns .field-hint { grid-column: 1 / -1; }
 .checkbox-group label {
   display: flex;
   align-items: center;
@@ -385,9 +387,7 @@ textarea { resize: vertical; min-height: 80px; }
         <option value="TCGDC">TCGDC (DC Public Charter School)</option>
         <option value="TCGPG">TCG School of Prince George&#39;s County</option>
         <option value="TCG_BALT">TCG School of Baltimore</option>
-        <option value="MAA">Monarch Academy Annapolis</option>
-        <option value="MAGB">Monarch Academy Glen Burnie</option>
-        <option value="MGA_LAUREL">Monarch Global Academy Laurel</option>
+        <option value="TCG_TA">Transformation Academy</option>
         <option value="MPCP">Monarch Preschool College Park</option>
         <option value="MULTI_SITE">I work across multiple sites</option>
       </select>
@@ -415,6 +415,39 @@ textarea { resize: vertical; min-height: 80px; }
     </div>
 
     <div class="field">
+      <label class="field-label">Years in your current role</label>
+      <div class="radio-chips">
+        <label><input type="radio" name="YearsCurrentRole" value="LT1"> Less than 1 year</label>
+        <label><input type="radio" name="YearsCurrentRole" value="1_3"> 1&ndash;3 years</label>
+        <label><input type="radio" name="YearsCurrentRole" value="4_7"> 4&ndash;7 years</label>
+        <label><input type="radio" name="YearsCurrentRole" value="8_PLUS"> 8+ years</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">Highest level of education completed</label>
+      <select name="EducationLevel">
+        <option value="">&#8212; Select &#8212;</option>
+        <option value="HS_DIPLOMA">High School Diploma</option>
+        <option value="GED">GED</option>
+        <option value="SOME_COLLEGE">Some College (no degree)</option>
+        <option value="ASSOCIATES">Associate&#39;s Degree</option>
+        <option value="BACHELORS">Bachelor&#39;s Degree</option>
+        <option value="MASTERS">Master&#39;s Degree</option>
+        <option value="DOCTORATE">Doctoral Degree (EdD / PhD)</option>
+        <option value="ENROLLED">Currently Enrolled in Degree Program</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label class="field-label">Do you supervise or provide oversight to other team members?</label>
+      <div class="radio-chips">
+        <label><input type="radio" name="Supervisory" value="YES"> Yes</label>
+        <label><input type="radio" name="Supervisory" value="NO"> No</label>
+      </div>
+    </div>
+
+    <div class="field">
       <label class="field-label">Age groups you primarily work with</label>
       <div class="field-hint">Select all that apply</div>
       <div class="checkbox-group">
@@ -426,22 +459,68 @@ textarea { resize: vertical; min-height: 80px; }
       </div>
     </div>
 
-    <div class="field">
-      <label class="field-label">Credentials held</label>
-      <div class="field-hint">Select all that apply</div>
-      <div class="checkbox-group">
-        <label><input type="checkbox" name="Credentials" value="SPED_CERT"> Special Education Teaching Certificate</label>
-        <label><input type="checkbox" name="Credentials" value="GEN_CERT"> General Education Teaching Certificate</label>
-        <label><input type="checkbox" name="Credentials" value="CDA"> CDA Credential</label>
+    <div class="field" id="credentialsField">
+      <label class="field-label">Credentials &amp; Licensure</label>
+      <div class="field-hint">Select all that apply. Options shown are based on your role and site.</div>
+
+      <!-- Teaching Certs — shown for teachers, TBAs, teacher assistants, admins -->
+      <div class="checkbox-group cred-group" id="credTeaching" style="display:none;">
+        <div class="field-hint" style="font-weight:600; margin-top:8px;">Teaching Certificates</div>
+        <!-- MD certs — shown for MD sites -->
+        <div class="cred-md" style="display:none;">
+          <label><input type="checkbox" name="Credentials" value="MD_IPC"> MD Initial Professional Certificate (IPC)</label>
+          <label><input type="checkbox" name="Credentials" value="MD_SPC"> MD Standard Professional Certificate (SPC)</label>
+          <label><input type="checkbox" name="Credentials" value="MD_APC"> MD Advanced Professional Certificate (APC)</label>
+          <label><input type="checkbox" name="Credentials" value="MD_RTC"> MD Resident Teacher Certificate</label>
+          <label><input type="checkbox" name="Credentials" value="MD_CONDITIONAL"> MD Conditional Certificate</label>
+        </div>
+        <!-- DC certs — shown for DC site -->
+        <div class="cred-dc" style="display:none;">
+          <label><input type="checkbox" name="Credentials" value="DC_INITIAL"> DC Initial License</label>
+          <label><input type="checkbox" name="Credentials" value="DC_PROFESSIONAL"> DC Professional License</label>
+          <label><input type="checkbox" name="Credentials" value="DC_MASTER"> DC Master Educator License</label>
+          <label><input type="checkbox" name="Credentials" value="DC_TEMP"> DC Temporary License</label>
+        </div>
+      </div>
+
+      <!-- Admin Certs — shown for School Admin role -->
+      <div class="checkbox-group cred-group" id="credAdmin" style="display:none;">
+        <div class="field-hint" style="font-weight:600; margin-top:8px;">Administrator Certificates</div>
+        <div class="cred-md" style="display:none;">
+          <label><input type="checkbox" name="Credentials" value="MD_ADMIN1"> MD Administrator I</label>
+          <label><input type="checkbox" name="Credentials" value="MD_ADMIN2"> MD Administrator II</label>
+          <label><input type="checkbox" name="Credentials" value="MD_SUPT"> MD Superintendent Certificate</label>
+        </div>
+        <div class="cred-dc" style="display:none;">
+          <label><input type="checkbox" name="Credentials" value="DC_SCHOOL_LEADER"> DC School Leader License</label>
+          <label><input type="checkbox" name="Credentials" value="DC_DISTRICT_LEADER"> DC District Leader License</label>
+        </div>
+      </div>
+
+      <!-- Related Services — shown for SLP, OT, Social Worker, Counselor -->
+      <div class="checkbox-group cred-group" id="credRelated" style="display:none;">
+        <div class="field-hint" style="font-weight:600; margin-top:8px;">Related Services Credentials</div>
+        <label id="credCCCSLP" style="display:none;"><input type="checkbox" name="Credentials" value="CCC_SLP"> CCC-SLP</label>
+        <label id="credSLPA" style="display:none;"><input type="checkbox" name="Credentials" value="SLPA"> SLPA (Speech-Language Pathology Assistant)</label>
+        <label id="credOTRL" style="display:none;"><input type="checkbox" name="Credentials" value="OTR_L"> OTR/L (Occupational Therapist)</label>
+        <label id="credCOTA" style="display:none;"><input type="checkbox" name="Credentials" value="COTA"> COTA (Certified OT Assistant)</label>
+        <label id="credLCSW" style="display:none;"><input type="checkbox" name="Credentials" value="LCSW"> LCSW / LCSW-C / LMSW</label>
+        <label id="credLICSW" style="display:none;"><input type="checkbox" name="Credentials" value="LICSW"> LICSW / LGSW (DC)</label>
+        <label id="credCounselor" style="display:none;"><input type="checkbox" name="Credentials" value="COUNSELOR_LICENSE"> LGPC / LCPC (Counseling License)</label>
+        <label id="credSchoolCounselor" style="display:none;"><input type="checkbox" name="Credentials" value="SCHOOL_COUNSELING"> School Counseling License</label>
+      </div>
+
+      <!-- Behavior — shown for TBA, BCBA roles, and optionally others -->
+      <div class="checkbox-group cred-group" id="credBehavior" style="display:none;">
+        <div class="field-hint" style="font-weight:600; margin-top:8px;">Behavior Credentials</div>
+        <label><input type="checkbox" name="Credentials" value="BCBA"> BCBA (Board Certified Behavior Analyst)</label>
+        <label><input type="checkbox" name="Credentials" value="BCaBA"> BCaBA (Board Certified Assistant Behavior Analyst)</label>
         <label><input type="checkbox" name="Credentials" value="RBT"> RBT (Registered Behavior Technician)</label>
-        <label><input type="checkbox" name="Credentials" value="BCBA"> BCBA / BCaBA</label>
-        <label><input type="checkbox" name="Credentials" value="SW_LICENSE"> Social Work License (LMSW, LCSW, LCSW-C, LICSW)</label>
-        <label><input type="checkbox" name="Credentials" value="SLP_LICENSE"> SLP License / CCC-SLP</label>
-        <label><input type="checkbox" name="Credentials" value="OT_LICENSE"> OT License / OTR/L</label>
-        <label><input type="checkbox" name="Credentials" value="COUNSELOR_LICENSE"> Counseling License (LGPC, LCPC)</label>
-        <label><input type="checkbox" name="Credentials" value="ADMIN_CERT"> Administrator Certificate</label>
-        <label><input type="checkbox" name="Credentials" value="PCM_CERT"> PCM Certified</label>
-        <label><input type="checkbox" name="Credentials" value="NONE"> No formal credentials yet</label>
+      </div>
+
+      <!-- Always visible -->
+      <div class="checkbox-group" style="margin-top:8px;">
+        <label><input type="checkbox" name="Credentials" value="NONE"> No formal credentials / licenses</label>
       </div>
     </div>
 
@@ -691,6 +770,15 @@ textarea { resize: vertical; min-height: 80px; }
           <td><input type="radio" name="Cls_PBL" value="5"></td>
           <td><input type="radio" name="Cls_PBL" value="0"></td>
         </tr>
+        <tr>
+          <td>Sensory processing strategies for the classroom</td>
+          <td><input type="radio" name="Cls_Sensory" value="1"></td>
+          <td><input type="radio" name="Cls_Sensory" value="2"></td>
+          <td><input type="radio" name="Cls_Sensory" value="3"></td>
+          <td><input type="radio" name="Cls_Sensory" value="4"></td>
+          <td><input type="radio" name="Cls_Sensory" value="5"></td>
+          <td><input type="radio" name="Cls_Sensory" value="0"></td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -780,6 +868,42 @@ textarea { resize: vertical; min-height: 80px; }
           <td><input type="radio" name="IEP_Timelines" value="5"></td>
           <td><input type="radio" name="IEP_Timelines" value="0"></td>
         </tr>
+        <tr>
+          <td>Understanding IEP classifications and student diagnoses</td>
+          <td><input type="radio" name="IEP_Classifications" value="1"></td>
+          <td><input type="radio" name="IEP_Classifications" value="2"></td>
+          <td><input type="radio" name="IEP_Classifications" value="3"></td>
+          <td><input type="radio" name="IEP_Classifications" value="4"></td>
+          <td><input type="radio" name="IEP_Classifications" value="5"></td>
+          <td><input type="radio" name="IEP_Classifications" value="0"></td>
+        </tr>
+        <tr>
+          <td>Reading and interpreting a complete IEP</td>
+          <td><input type="radio" name="IEP_ReadIEP" value="1"></td>
+          <td><input type="radio" name="IEP_ReadIEP" value="2"></td>
+          <td><input type="radio" name="IEP_ReadIEP" value="3"></td>
+          <td><input type="radio" name="IEP_ReadIEP" value="4"></td>
+          <td><input type="radio" name="IEP_ReadIEP" value="5"></td>
+          <td><input type="radio" name="IEP_ReadIEP" value="0"></td>
+        </tr>
+        <tr>
+          <td>Evidence-based interventions and best practices</td>
+          <td><input type="radio" name="IEP_EvidenceBased" value="1"></td>
+          <td><input type="radio" name="IEP_EvidenceBased" value="2"></td>
+          <td><input type="radio" name="IEP_EvidenceBased" value="3"></td>
+          <td><input type="radio" name="IEP_EvidenceBased" value="4"></td>
+          <td><input type="radio" name="IEP_EvidenceBased" value="5"></td>
+          <td><input type="radio" name="IEP_EvidenceBased" value="0"></td>
+        </tr>
+        <tr>
+          <td>Transition planning for post-secondary life (ages 18&ndash;21)</td>
+          <td><input type="radio" name="IEP_Transition" value="1"></td>
+          <td><input type="radio" name="IEP_Transition" value="2"></td>
+          <td><input type="radio" name="IEP_Transition" value="3"></td>
+          <td><input type="radio" name="IEP_Transition" value="4"></td>
+          <td><input type="radio" name="IEP_Transition" value="5"></td>
+          <td><input type="radio" name="IEP_Transition" value="0"></td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -842,13 +966,40 @@ textarea { resize: vertical; min-height: 80px; }
           <td><input type="radio" name="Comp_SPEDLaw" value="0"></td>
         </tr>
         <tr>
-          <td>CARF accreditation standards and what they mean for your role</td>
-          <td><input type="radio" name="Comp_CARF" value="1"></td>
-          <td><input type="radio" name="Comp_CARF" value="2"></td>
-          <td><input type="radio" name="Comp_CARF" value="3"></td>
-          <td><input type="radio" name="Comp_CARF" value="4"></td>
-          <td><input type="radio" name="Comp_CARF" value="5"></td>
-          <td><input type="radio" name="Comp_CARF" value="0"></td>
+          <td>HIPAA: Protecting student and employee health information</td>
+          <td><input type="radio" name="Comp_HIPAA" value="1"></td>
+          <td><input type="radio" name="Comp_HIPAA" value="2"></td>
+          <td><input type="radio" name="Comp_HIPAA" value="3"></td>
+          <td><input type="radio" name="Comp_HIPAA" value="4"></td>
+          <td><input type="radio" name="Comp_HIPAA" value="5"></td>
+          <td><input type="radio" name="Comp_HIPAA" value="0"></td>
+        </tr>
+        <tr>
+          <td>Understanding COMAR (Code of Maryland Regulations) / MSDE (Maryland State Department of Education) requirements for your school</td>
+          <td><input type="radio" name="Comp_COMAR" value="1"></td>
+          <td><input type="radio" name="Comp_COMAR" value="2"></td>
+          <td><input type="radio" name="Comp_COMAR" value="3"></td>
+          <td><input type="radio" name="Comp_COMAR" value="4"></td>
+          <td><input type="radio" name="Comp_COMAR" value="5"></td>
+          <td><input type="radio" name="Comp_COMAR" value="0"></td>
+        </tr>
+        <tr>
+          <td>Understanding OSSE (Office of the State Superintendent of Education) / DCPS (DC Public Schools) regulations for your school</td>
+          <td><input type="radio" name="Comp_OSSE" value="1"></td>
+          <td><input type="radio" name="Comp_OSSE" value="2"></td>
+          <td><input type="radio" name="Comp_OSSE" value="3"></td>
+          <td><input type="radio" name="Comp_OSSE" value="4"></td>
+          <td><input type="radio" name="Comp_OSSE" value="5"></td>
+          <td><input type="radio" name="Comp_OSSE" value="0"></td>
+        </tr>
+        <tr>
+          <td>Documentation and record keeping best practices</td>
+          <td><input type="radio" name="Comp_Documentation" value="1"></td>
+          <td><input type="radio" name="Comp_Documentation" value="2"></td>
+          <td><input type="radio" name="Comp_Documentation" value="3"></td>
+          <td><input type="radio" name="Comp_Documentation" value="4"></td>
+          <td><input type="radio" name="Comp_Documentation" value="5"></td>
+          <td><input type="radio" name="Comp_Documentation" value="0"></td>
         </tr>
         <tr>
           <td>Incident reporting and documentation</td>
@@ -930,7 +1081,7 @@ textarea { resize: vertical; min-height: 80px; }
           <td><input type="radio" name="Prof_Teamwork" value="0"></td>
         </tr>
         <tr>
-          <td>Recognizing and managing compassion fatigue and secondary trauma</td>
+          <td>Self-care and wellness: setting boundaries, practicing self-care techniques (journaling, yoga, meditation), taking care of yourself</td>
           <td><input type="radio" name="Prof_CompassionFatigue" value="1"></td>
           <td><input type="radio" name="Prof_CompassionFatigue" value="2"></td>
           <td><input type="radio" name="Prof_CompassionFatigue" value="3"></td>
@@ -948,7 +1099,7 @@ textarea { resize: vertical; min-height: 80px; }
           <td><input type="radio" name="Prof_Safety" value="0"></td>
         </tr>
         <tr>
-          <td>Technology platforms (SharePoint/GuildLink, Teams, Paycom)</td>
+          <td>Technology tools used in your role (platforms, apps, systems)</td>
           <td><input type="radio" name="Prof_Technology" value="1"></td>
           <td><input type="radio" name="Prof_Technology" value="2"></td>
           <td><input type="radio" name="Prof_Technology" value="3"></td>
@@ -973,6 +1124,24 @@ textarea { resize: vertical; min-height: 80px; }
           <td><input type="radio" name="Prof_EscalatedFamily" value="4"></td>
           <td><input type="radio" name="Prof_EscalatedFamily" value="5"></td>
           <td><input type="radio" name="Prof_EscalatedFamily" value="0"></td>
+        </tr>
+        <tr>
+          <td>Staff-to-staff conflict resolution</td>
+          <td><input type="radio" name="Prof_ConflictRes" value="1"></td>
+          <td><input type="radio" name="Prof_ConflictRes" value="2"></td>
+          <td><input type="radio" name="Prof_ConflictRes" value="3"></td>
+          <td><input type="radio" name="Prof_ConflictRes" value="4"></td>
+          <td><input type="radio" name="Prof_ConflictRes" value="5"></td>
+          <td><input type="radio" name="Prof_ConflictRes" value="0"></td>
+        </tr>
+        <tr>
+          <td>Brain science and behavior: understanding the biology and chemistry of the brain, how it impacts our behavior and student behavior, why it matters, and how trauma and development impact learning</td>
+          <td><input type="radio" name="Prof_BrainScience" value="1"></td>
+          <td><input type="radio" name="Prof_BrainScience" value="2"></td>
+          <td><input type="radio" name="Prof_BrainScience" value="3"></td>
+          <td><input type="radio" name="Prof_BrainScience" value="4"></td>
+          <td><input type="radio" name="Prof_BrainScience" value="5"></td>
+          <td><input type="radio" name="Prof_BrainScience" value="0"></td>
         </tr>
       </tbody>
     </table>
@@ -1035,6 +1204,7 @@ textarea { resize: vertical; min-height: 80px; }
             <option value="CLS_TECH">Assistive Technology / AAC</option>
             <option value="CLS_COTEACH">Co-teaching &amp; Collaboration</option>
             <option value="CLS_PBL">Project-based Learning</option>
+            <option value="CLS_SENSORY">Sensory Processing Strategies</option>
           </optgroup>
           <optgroup label="Related Services &amp; IEP">
             <option value="IEP_GOALS">IEP Goal Writing</option>
@@ -1044,22 +1214,31 @@ textarea { resize: vertical; min-height: 80px; }
             <option value="IEP_PROGRESS">IEP Progress Monitoring</option>
             <option value="IEP_FAMILY">Family Coordination (IEP)</option>
             <option value="IEP_COMPLIANCE">IEP Compliance Timelines</option>
+            <option value="IEP_CLASSIFICATIONS">IEP Classifications &amp; Diagnoses</option>
+            <option value="IEP_READ_IEP">Reading a Complete IEP</option>
+            <option value="IEP_EVIDENCE">Evidence-Based Interventions</option>
+            <option value="IEP_TRANSITION">Transition Planning (Post-Secondary)</option>
           </optgroup>
           <optgroup label="Compliance">
             <option value="COMP_MANDATE">Mandated Reporting</option>
             <option value="COMP_FERPA">FERPA / Confidentiality</option>
             <option value="COMP_RESTRAINT">Exclusion / Seclusion / Restraint</option>
             <option value="COMP_SPED_LAW">Special Education Law</option>
-            <option value="COMP_CARF">CARF Accreditation</option>
+            <option value="COMP_HIPAA">HIPAA (Health Information Privacy)</option>
+            <option value="COMP_COMAR">COMAR / MSDE Regulations</option>
+            <option value="COMP_OSSE">OSSE / DCPS Regulations</option>
+            <option value="COMP_DOCUMENTATION">Documentation &amp; Record Keeping</option>
           </optgroup>
           <optgroup label="Professional Skills">
             <option value="PROF_BOUND">Professional Boundaries</option>
             <option value="PROF_FAMILY">Family Communication</option>
             <option value="PROF_DEI">Cultural Humility / DEI</option>
-            <option value="PROF_FATIGUE">Compassion Fatigue / Self-Care</option>
+            <option value="PROF_FATIGUE">Self-Care &amp; Wellness</option>
             <option value="PROF_SAFETY">Safety &amp; Emergency Prep</option>
-            <option value="PROF_TECH">Technology Platforms</option>
+            <option value="PROF_TECH">Technology Tools for Your Role</option>
             <option value="PROF_ESCALATED">Managing Escalated Family Interactions</option>
+            <option value="PROF_CONFLICT">Staff-to-Staff Conflict Resolution</option>
+            <option value="PROF_BRAIN">Brain Science &amp; Behavior</option>
           </optgroup>
         </select>
 
@@ -1089,6 +1268,7 @@ textarea { resize: vertical; min-height: 80px; }
             <option value="CLS_TECH">Assistive Technology / AAC</option>
             <option value="CLS_COTEACH">Co-teaching &amp; Collaboration</option>
             <option value="CLS_PBL">Project-based Learning</option>
+            <option value="CLS_SENSORY">Sensory Processing Strategies</option>
           </optgroup>
           <optgroup label="Related Services &amp; IEP">
             <option value="IEP_GOALS">IEP Goal Writing</option>
@@ -1098,22 +1278,31 @@ textarea { resize: vertical; min-height: 80px; }
             <option value="IEP_PROGRESS">IEP Progress Monitoring</option>
             <option value="IEP_FAMILY">Family Coordination (IEP)</option>
             <option value="IEP_COMPLIANCE">IEP Compliance Timelines</option>
+            <option value="IEP_CLASSIFICATIONS">IEP Classifications &amp; Diagnoses</option>
+            <option value="IEP_READ_IEP">Reading a Complete IEP</option>
+            <option value="IEP_EVIDENCE">Evidence-Based Interventions</option>
+            <option value="IEP_TRANSITION">Transition Planning (Post-Secondary)</option>
           </optgroup>
           <optgroup label="Compliance">
             <option value="COMP_MANDATE">Mandated Reporting</option>
             <option value="COMP_FERPA">FERPA / Confidentiality</option>
             <option value="COMP_RESTRAINT">Exclusion / Seclusion / Restraint</option>
             <option value="COMP_SPED_LAW">Special Education Law</option>
-            <option value="COMP_CARF">CARF Accreditation</option>
+            <option value="COMP_HIPAA">HIPAA (Health Information Privacy)</option>
+            <option value="COMP_COMAR">COMAR / MSDE Regulations</option>
+            <option value="COMP_OSSE">OSSE / DCPS Regulations</option>
+            <option value="COMP_DOCUMENTATION">Documentation &amp; Record Keeping</option>
           </optgroup>
           <optgroup label="Professional Skills">
             <option value="PROF_BOUND">Professional Boundaries</option>
             <option value="PROF_FAMILY">Family Communication</option>
             <option value="PROF_DEI">Cultural Humility / DEI</option>
-            <option value="PROF_FATIGUE">Compassion Fatigue / Self-Care</option>
+            <option value="PROF_FATIGUE">Self-Care &amp; Wellness</option>
             <option value="PROF_SAFETY">Safety &amp; Emergency Prep</option>
-            <option value="PROF_TECH">Technology Platforms</option>
+            <option value="PROF_TECH">Technology Tools for Your Role</option>
             <option value="PROF_ESCALATED">Managing Escalated Family Interactions</option>
+            <option value="PROF_CONFLICT">Staff-to-Staff Conflict Resolution</option>
+            <option value="PROF_BRAIN">Brain Science &amp; Behavior</option>
           </optgroup>
         </select>
 
@@ -1143,6 +1332,7 @@ textarea { resize: vertical; min-height: 80px; }
             <option value="CLS_TECH">Assistive Technology / AAC</option>
             <option value="CLS_COTEACH">Co-teaching &amp; Collaboration</option>
             <option value="CLS_PBL">Project-based Learning</option>
+            <option value="CLS_SENSORY">Sensory Processing Strategies</option>
           </optgroup>
           <optgroup label="Related Services &amp; IEP">
             <option value="IEP_GOALS">IEP Goal Writing</option>
@@ -1152,22 +1342,31 @@ textarea { resize: vertical; min-height: 80px; }
             <option value="IEP_PROGRESS">IEP Progress Monitoring</option>
             <option value="IEP_FAMILY">Family Coordination (IEP)</option>
             <option value="IEP_COMPLIANCE">IEP Compliance Timelines</option>
+            <option value="IEP_CLASSIFICATIONS">IEP Classifications &amp; Diagnoses</option>
+            <option value="IEP_READ_IEP">Reading a Complete IEP</option>
+            <option value="IEP_EVIDENCE">Evidence-Based Interventions</option>
+            <option value="IEP_TRANSITION">Transition Planning (Post-Secondary)</option>
           </optgroup>
           <optgroup label="Compliance">
             <option value="COMP_MANDATE">Mandated Reporting</option>
             <option value="COMP_FERPA">FERPA / Confidentiality</option>
             <option value="COMP_RESTRAINT">Exclusion / Seclusion / Restraint</option>
             <option value="COMP_SPED_LAW">Special Education Law</option>
-            <option value="COMP_CARF">CARF Accreditation</option>
+            <option value="COMP_HIPAA">HIPAA (Health Information Privacy)</option>
+            <option value="COMP_COMAR">COMAR / MSDE Regulations</option>
+            <option value="COMP_OSSE">OSSE / DCPS Regulations</option>
+            <option value="COMP_DOCUMENTATION">Documentation &amp; Record Keeping</option>
           </optgroup>
           <optgroup label="Professional Skills">
             <option value="PROF_BOUND">Professional Boundaries</option>
             <option value="PROF_FAMILY">Family Communication</option>
             <option value="PROF_DEI">Cultural Humility / DEI</option>
-            <option value="PROF_FATIGUE">Compassion Fatigue / Self-Care</option>
+            <option value="PROF_FATIGUE">Self-Care &amp; Wellness</option>
             <option value="PROF_SAFETY">Safety &amp; Emergency Prep</option>
-            <option value="PROF_TECH">Technology Platforms</option>
+            <option value="PROF_TECH">Technology Tools for Your Role</option>
             <option value="PROF_ESCALATED">Managing Escalated Family Interactions</option>
+            <option value="PROF_CONFLICT">Staff-to-Staff Conflict Resolution</option>
+            <option value="PROF_BRAIN">Brain Science &amp; Behavior</option>
           </optgroup>
         </select>
       </div>
@@ -1197,6 +1396,124 @@ textarea { resize: vertical; min-height: 80px; }
     </div>
 
     <div class="field">
+      <label class="field-label">When are you most available for training?</label>
+      <div class="field-hint">Select all that apply</div>
+      <div class="checkbox-group">
+        <label><input type="checkbox" name="PreferredTimes" value="BEFORE_SCHOOL"> Before school hours</label>
+        <label><input type="checkbox" name="PreferredTimes" value="AFTER_SCHOOL"> After school hours</label>
+        <label><input type="checkbox" name="PreferredTimes" value="PD_DAYS"> During scheduled PD days</label>
+        <label><input type="checkbox" name="PreferredTimes" value="SUMMER"> Summer professional development</label>
+        <label><input type="checkbox" name="PreferredTimes" value="PLANNING"> During planning periods</label>
+        <label><input type="checkbox" name="PreferredTimes" value="FLEXIBLE"> I&#39;m flexible</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">What barriers make it difficult for you to participate in training?</label>
+      <div class="field-hint">Select all that apply</div>
+      <div class="checkbox-group">
+        <label><input type="checkbox" name="Barriers" value="COVERAGE"> Hard to get classroom/caseload coverage</label>
+        <label><input type="checkbox" name="Barriers" value="SCHEDULE"> Training times conflict with my schedule</label>
+        <label><input type="checkbox" name="Barriers" value="RELEVANCE"> Topics aren&#39;t relevant to my role</label>
+        <label><input type="checkbox" name="Barriers" value="LENGTH"> Training sessions are too long</label>
+        <label><input type="checkbox" name="Barriers" value="SELF_LEARNER"> I prefer learning on my own</label>
+        <label><input type="checkbox" name="Barriers" value="NONE"> No significant barriers</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">Which of these topics have you received formal training on since joining The Children&#39;s Guild?</label>
+      <div class="field-hint">Select all that apply. This helps us understand where refreshers vs. new training is needed.</div>
+      <div class="checkbox-group checkbox-columns" id="previousTrainingGroup">
+        <div class="field-hint" style="font-weight:600; margin-top:4px;">Behavioral Support</div>
+        <label><input type="checkbox" name="PreviousTraining" value="BEH_FBA"> FBA</label>
+        <label><input type="checkbox" name="PreviousTraining" value="BEH_BIP"> BIP</label>
+        <label><input type="checkbox" name="PreviousTraining" value="BEH_DEESC"> De-escalation</label>
+        <label><input type="checkbox" name="PreviousTraining" value="BEH_TIC"> Trauma-Informed Care</label>
+        <label><input type="checkbox" name="PreviousTraining" value="BEH_PBIS"> PBIS</label>
+        <label><input type="checkbox" name="PreviousTraining" value="BEH_RESTORATIVE"> Restorative Practices</label>
+        <label><input type="checkbox" name="PreviousTraining" value="BEH_DATA"> Behavioral Data Collection</label>
+        <label><input type="checkbox" name="PreviousTraining" value="BEH_TBA"> TBA Strategies</label>
+        <label><input type="checkbox" name="PreviousTraining" value="BEH_SUICIDE"> Suicide Risk / Self-Harm</label>
+        <label><input type="checkbox" name="PreviousTraining" value="BEH_ELOPEMENT"> Elopement</label>
+        <label><input type="checkbox" name="PreviousTraining" value="BEH_MEDEMERG"> Medical Emergency</label>
+        <div class="field-hint" style="font-weight:600; margin-top:8px;">Classroom &amp; Instruction</div>
+        <label><input type="checkbox" name="PreviousTraining" value="CLS_DIFF"> Differentiation</label>
+        <label><input type="checkbox" name="PreviousTraining" value="CLS_SEL"> SEL</label>
+        <label><input type="checkbox" name="PreviousTraining" value="CLS_TECH"> Assistive Technology</label>
+        <label><input type="checkbox" name="PreviousTraining" value="CLS_COTEACH"> Co-Teaching</label>
+        <div class="field-hint" style="font-weight:600; margin-top:8px;">Related Services &amp; IEP</div>
+        <label><input type="checkbox" name="PreviousTraining" value="IEP_CLASSIFICATIONS"> IEP Classifications &amp; Diagnoses</label>
+        <label><input type="checkbox" name="PreviousTraining" value="IEP_READ_IEP"> Reading a Complete IEP</label>
+        <label><input type="checkbox" name="PreviousTraining" value="IEP_EVIDENCE"> Evidence-Based Interventions</label>
+        <label><input type="checkbox" name="PreviousTraining" value="IEP_TRANSITION"> Transition Planning</label>
+        <div class="field-hint" style="font-weight:600; margin-top:8px;">Compliance</div>
+        <label><input type="checkbox" name="PreviousTraining" value="COMP_MANDATE"> Mandated Reporting</label>
+        <label><input type="checkbox" name="PreviousTraining" value="COMP_FERPA"> FERPA</label>
+        <label><input type="checkbox" name="PreviousTraining" value="COMP_RESTRAINT"> Restraint / Seclusion</label>
+        <label><input type="checkbox" name="PreviousTraining" value="COMP_SPED_LAW"> SPED Law</label>
+        <label><input type="checkbox" name="PreviousTraining" value="COMP_HIPAA"> HIPAA</label>
+        <label><input type="checkbox" name="PreviousTraining" value="COMP_COMAR"> COMAR / MSDE Regulations</label>
+        <label><input type="checkbox" name="PreviousTraining" value="COMP_OSSE"> OSSE / DCPS Regulations</label>
+        <div class="field-hint" style="font-weight:600; margin-top:8px;">Professional Skills</div>
+        <label><input type="checkbox" name="PreviousTraining" value="PROF_BOUND"> Professional Boundaries</label>
+        <label><input type="checkbox" name="PreviousTraining" value="PROF_DEI"> Cultural Humility / DEI</label>
+        <label><input type="checkbox" name="PreviousTraining" value="PROF_FATIGUE"> Self-Care &amp; Wellness</label>
+        <label><input type="checkbox" name="PreviousTraining" value="PROF_SAFETY"> Safety / Emergency Prep</label>
+        <label><input type="checkbox" name="PreviousTraining" value="PROF_TECH"> Technology Tools</label>
+        <label><input type="checkbox" name="PreviousTraining" value="PROF_CONFLICT"> Conflict Resolution</label>
+        <label><input type="checkbox" name="PreviousTraining" value="PROF_BRAIN"> Brain Science &amp; Behavior</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">Are there topics where you&#39;d be willing to lead or co-lead a training for colleagues?</label>
+      <div class="field-hint">Select any topics where you feel confident enough to share your expertise.</div>
+      <div class="checkbox-group checkbox-columns" id="mentorGroup">
+        <div class="field-hint" style="font-weight:600; margin-top:4px;">Behavioral Support</div>
+        <label><input type="checkbox" name="MentorTopics" value="BEH_FBA"> FBA</label>
+        <label><input type="checkbox" name="MentorTopics" value="BEH_BIP"> BIP</label>
+        <label><input type="checkbox" name="MentorTopics" value="BEH_DEESC"> De-escalation</label>
+        <label><input type="checkbox" name="MentorTopics" value="BEH_TIC"> Trauma-Informed Care</label>
+        <label><input type="checkbox" name="MentorTopics" value="BEH_PBIS"> PBIS</label>
+        <label><input type="checkbox" name="MentorTopics" value="BEH_RESTORATIVE"> Restorative Practices</label>
+        <label><input type="checkbox" name="MentorTopics" value="BEH_DATA"> Behavioral Data Collection</label>
+        <label><input type="checkbox" name="MentorTopics" value="BEH_TBA"> TBA Strategies</label>
+        <label><input type="checkbox" name="MentorTopics" value="BEH_SUICIDE"> Suicide Risk / Self-Harm</label>
+        <div class="field-hint" style="font-weight:600; margin-top:8px;">Classroom &amp; Instruction</div>
+        <label><input type="checkbox" name="MentorTopics" value="CLS_DIFF"> Differentiation</label>
+        <label><input type="checkbox" name="MentorTopics" value="CLS_ENV"> Classroom Environment</label>
+        <label><input type="checkbox" name="MentorTopics" value="CLS_SEL"> SEL</label>
+        <label><input type="checkbox" name="MentorTopics" value="CLS_TECH"> Assistive Technology</label>
+        <label><input type="checkbox" name="MentorTopics" value="CLS_COTEACH"> Co-Teaching</label>
+        <label><input type="checkbox" name="MentorTopics" value="CLS_PBL"> Project-Based Learning</label>
+        <label><input type="checkbox" name="MentorTopics" value="CLS_SENSORY"> Sensory Processing</label>
+        <div class="field-hint" style="font-weight:600; margin-top:8px;">Related Services &amp; IEP</div>
+        <label><input type="checkbox" name="MentorTopics" value="IEP_GOALS"> IEP Goal Writing</label>
+        <label><input type="checkbox" name="MentorTopics" value="IEP_COLLAB"> IEP Collaboration</label>
+        <label><input type="checkbox" name="MentorTopics" value="IEP_FAMILY"> Family Coordination</label>
+        <label><input type="checkbox" name="MentorTopics" value="IEP_CLASSIFICATIONS"> IEP Classifications &amp; Diagnoses</label>
+        <label><input type="checkbox" name="MentorTopics" value="IEP_READ_IEP"> Reading a Complete IEP</label>
+        <label><input type="checkbox" name="MentorTopics" value="IEP_EVIDENCE"> Evidence-Based Interventions</label>
+        <label><input type="checkbox" name="MentorTopics" value="IEP_TRANSITION"> Transition Planning</label>
+        <div class="field-hint" style="font-weight:600; margin-top:8px;">Compliance</div>
+        <label><input type="checkbox" name="MentorTopics" value="COMP_MANDATE"> Mandated Reporting</label>
+        <label><input type="checkbox" name="MentorTopics" value="COMP_FERPA"> FERPA</label>
+        <label><input type="checkbox" name="MentorTopics" value="COMP_HIPAA"> HIPAA</label>
+        <label><input type="checkbox" name="MentorTopics" value="COMP_COMAR"> COMAR / MSDE Regulations</label>
+        <label><input type="checkbox" name="MentorTopics" value="COMP_OSSE"> OSSE / DCPS Regulations</label>
+        <div class="field-hint" style="font-weight:600; margin-top:8px;">Professional Skills</div>
+        <label><input type="checkbox" name="MentorTopics" value="PROF_BOUND"> Professional Boundaries</label>
+        <label><input type="checkbox" name="MentorTopics" value="PROF_FAMILY"> Family Communication</label>
+        <label><input type="checkbox" name="MentorTopics" value="PROF_DEI"> Cultural Humility / DEI</label>
+        <label><input type="checkbox" name="MentorTopics" value="PROF_FATIGUE"> Self-Care &amp; Wellness</label>
+        <label><input type="checkbox" name="MentorTopics" value="PROF_TECH"> Technology Tools</label>
+        <label><input type="checkbox" name="MentorTopics" value="PROF_CONFLICT"> Conflict Resolution</label>
+        <label><input type="checkbox" name="MentorTopics" value="PROF_BRAIN"> Brain Science &amp; Behavior</label>
+      </div>
+    </div>
+
+    <div class="field">
       <label class="field-label">Is there anything else you want us to know about your training and development needs?</label>
       <textarea name="OpenComments" placeholder="Share any additional thoughts, suggestions, or concerns..."></textarea>
     </div>
@@ -1217,6 +1534,8 @@ textarea { resize: vertical; min-height: 80px; }
 // ROLE-BASED CONDITIONAL LOGIC
 // ============================================================
 const RELATED_SERVICES_ROLES = ['SPED_TEACHER', 'SOCIAL_WORKER', 'SLP', 'OT', 'SCHOOL_COUNSELOR', 'SCHOOL_ADMIN'];
+const TEACHING_ROLES = ['SPED_TEACHER', 'GEN_ED_TEACHER', 'TBA', 'TEACHER_ASST', 'SCHOOL_ADMIN'];
+const BEHAVIOR_ROLES = ['TBA', 'SPED_TEACHER', 'SCHOOL_ADMIN', 'TEACHER_ASST'];
 
 function handleRoleChange() {
   const role = document.getElementById('roleSelect').value;
@@ -1226,8 +1545,50 @@ function handleRoleChange() {
   } else {
     rsSection.classList.remove('visible');
   }
+  updateCredentials();
   updateProgress();
 }
+
+function updateCredentials() {
+  const role = document.getElementById('roleSelect').value;
+  const site = document.querySelector('select[name="Site"]').value;
+  const isDC = (site === 'TCGDC');
+  const isMD = site && site !== 'TCGDC' && site !== 'MULTI_SITE';
+  const isMulti = (site === 'MULTI_SITE');
+
+  // Teaching certs
+  const showTeaching = TEACHING_ROLES.includes(role);
+  document.getElementById('credTeaching').style.display = showTeaching ? '' : 'none';
+
+  // Admin certs
+  document.getElementById('credAdmin').style.display = (role === 'SCHOOL_ADMIN') ? '' : 'none';
+
+  // Related services
+  const credRelated = document.getElementById('credRelated');
+  credRelated.style.display = ['SLP', 'OT', 'SOCIAL_WORKER', 'SCHOOL_COUNSELOR'].includes(role) ? '' : 'none';
+  document.getElementById('credCCCSLP').style.display = (role === 'SLP') ? '' : 'none';
+  document.getElementById('credSLPA').style.display = (role === 'SLP') ? '' : 'none';
+  document.getElementById('credOTRL').style.display = (role === 'OT') ? '' : 'none';
+  document.getElementById('credCOTA').style.display = (role === 'OT') ? '' : 'none';
+  document.getElementById('credLCSW').style.display = (role === 'SOCIAL_WORKER') ? '' : 'none';
+  document.getElementById('credLICSW').style.display = (role === 'SOCIAL_WORKER' && (isDC || isMulti)) ? '' : 'none';
+  document.getElementById('credCounselor').style.display = (role === 'SCHOOL_COUNSELOR') ? '' : 'none';
+  document.getElementById('credSchoolCounselor').style.display = (role === 'SCHOOL_COUNSELOR') ? '' : 'none';
+
+  // Behavior certs
+  document.getElementById('credBehavior').style.display = BEHAVIOR_ROLES.includes(role) ? '' : 'none';
+
+  // MD vs DC cert visibility
+  document.querySelectorAll('.cred-md').forEach(el => {
+    el.style.display = (isMD || isMulti) ? '' : 'none';
+  });
+  document.querySelectorAll('.cred-dc').forEach(el => {
+    el.style.display = (isDC || isMulti) ? '' : 'none';
+  });
+}
+
+// Also update credentials when site changes
+document.querySelector('select[name="Site"]').addEventListener('change', updateCredentials);
 
 // ============================================================
 // PROGRESS BAR
@@ -1326,14 +1687,16 @@ function handleSubmit() {
     'Beh_Restorative','Beh_DataCollection','Beh_TBAStrategies','Beh_Transitions',
     'Beh_AntiBullying','Beh_SuicideRisk','Beh_Elopement','Beh_MedEmergency',
     'Cls_Differentiation','Cls_Environment','Cls_AccommodMod','Cls_SEL',
-    'Cls_AssistTech','Cls_ProgressMon','Cls_CoTeach','Cls_PBL',
+    'Cls_AssistTech','Cls_ProgressMon','Cls_CoTeach','Cls_PBL','Cls_Sensory',
     'IEP_GoalWriting','IEP_TeacherCollab','IEP_Caseload','IEP_ServiceModels',
     'IEP_ProgressMon','IEP_FamilyCoord','IEP_Timelines',
+    'IEP_Classifications','IEP_ReadIEP','IEP_EvidenceBased','IEP_Transition',
     'Comp_MandatedReporter','Comp_FERPA','Comp_Restraint','Comp_SPEDLaw',
-    'Comp_CARF','Comp_IncidentReport','Comp_MedAdmin',
+    'Comp_HIPAA','Comp_COMAR','Comp_OSSE','Comp_Documentation',
+    'Comp_IncidentReport','Comp_MedAdmin',
     'Prof_Boundaries','Prof_FamilyComm','Prof_CulturalDEI','Prof_Teamwork',
     'Prof_CompassionFatigue','Prof_Safety','Prof_Technology','Prof_TimeMgmt',
-    'Prof_EscalatedFamily','Satisfaction'
+    'Prof_EscalatedFamily','Prof_ConflictRes','Prof_BrainScience','Satisfaction'
   ];
   allLikertFields.forEach(key => {
     if (data[key] !== undefined && data[key] !== '') {
@@ -1343,7 +1706,10 @@ function handleSubmit() {
     }
   });
   // Ensure text fields default to empty string
-  ['AgeGroups','Credentials','PreferredFormat','OpenTopic','Onboarding_GapTopics','OpenComments','Priority1','Priority2','Priority3'].forEach(key => {
+  ['AgeGroups','Credentials','PreferredFormat','PreferredTimes','Barriers',
+   'PreviousTraining','MentorTopics','OpenTopic','Onboarding_GapTopics',
+   'OpenComments','Priority1','Priority2','Priority3',
+   'YearsCurrentRole','EducationLevel','Supervisory'].forEach(key => {
     if (!data[key]) data[key] = '';
   });
 

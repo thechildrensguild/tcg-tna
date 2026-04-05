@@ -1,0 +1,115 @@
+// =====================================================================
+// DAX MEASURES for TCG Training Needs Assessment Dashboard
+// =====================================================================
+// Add these to a dedicated Measures table in Power BI Desktop:
+//   Modeling > New table > Measures = {0}
+//   Then create each measure on that table.
+// =====================================================================
+
+
+// ----- RESPONSE OVERVIEW -----
+
+Response Count =
+    COUNTROWS(TNAResponses)
+
+Completion Rate =
+    DIVIDE(
+        COUNTROWS(FILTER(TNAResponses, NOT(ISBLANK(TNAResponses[Role])))),
+        COUNTROWS(TNAResponses),
+        0
+    )
+
+
+// ----- LIKERT SCORES (use on LikertScores unpivoted table) -----
+
+// Average score excluding N/A (0 values already filtered in Power Query)
+Avg Score =
+    AVERAGE(LikertScores[Score])
+
+// Average score with explicit N/A exclusion (safety net if filter removed)
+Avg Score (excl NA) =
+    CALCULATE(
+        AVERAGE(LikertScores[Score]),
+        LikertScores[Score] <> 0
+    )
+
+// Count of valid (non-NA) responses per topic
+Valid Responses =
+    COUNTROWS(LikertScores)
+
+// Percentage who rated 1 or 2 (low confidence / high training need)
+Pct Low Confidence =
+    DIVIDE(
+        COUNTROWS(FILTER(LikertScores, LikertScores[Score] <= 2)),
+        COUNTROWS(LikertScores),
+        0
+    )
+
+// Percentage who rated 4 or 5 (high confidence / low training need)
+Pct High Confidence =
+    DIVIDE(
+        COUNTROWS(FILTER(LikertScores, LikertScores[Score] >= 4)),
+        COUNTROWS(LikertScores),
+        0
+    )
+
+// Score distribution label (for tooltips / conditional formatting)
+Need Level =
+    VAR AvgVal = [Avg Score]
+    RETURN
+        SWITCH(
+            TRUE(),
+            AvgVal <= 2, "High Need",
+            AvgVal <= 3, "Moderate Need",
+            AvgVal <= 4, "Some Need",
+            "Low Need"
+        )
+
+// Section average (use with Section slicer)
+Section Avg =
+    CALCULATE(
+        AVERAGE(LikertScores[Score]),
+        ALLEXCEPT(LikertScores, LikertScores[Section])
+    )
+
+
+// ----- PRIORITY ANALYSIS (use on TNAResponses table) -----
+
+// Count how many times a topic was picked as ANY priority (1, 2, or 3)
+// Use with a separate Priority lookup table or in a calculated table
+Priority Mentions =
+    VAR CurrentTopic = SELECTEDVALUE(PriorityTopics[PriorityCode])
+    RETURN
+        COUNTROWS(
+            FILTER(
+                TNAResponses,
+                TNAResponses[Priority1] = CurrentTopic
+                || TNAResponses[Priority2] = CurrentTopic
+                || TNAResponses[Priority3] = CurrentTopic
+            )
+        )
+
+// Weighted priority score (P1=3pts, P2=2pts, P3=1pt)
+Priority Weighted Score =
+    VAR CurrentTopic = SELECTEDVALUE(PriorityTopics[PriorityCode])
+    RETURN
+        SUMX(
+            TNAResponses,
+            IF(TNAResponses[Priority1] = CurrentTopic, 3, 0)
+            + IF(TNAResponses[Priority2] = CurrentTopic, 2, 0)
+            + IF(TNAResponses[Priority3] = CurrentTopic, 1, 0)
+        )
+
+
+// ----- SATISFACTION -----
+
+Avg Satisfaction =
+    CALCULATE(
+        AVERAGE(TNAResponses[Satisfaction]),
+        TNAResponses[Satisfaction] <> 0
+    )
+
+Satisfaction Distribution =
+    COUNTROWS(
+        FILTER(TNAResponses, NOT(ISBLANK(TNAResponses[Satisfaction])))
+    )
