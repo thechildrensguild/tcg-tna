@@ -1166,7 +1166,11 @@ function setLayout(mode) {
   document.body.classList.toggle('phone-mode', mode === 'phone');
   document.getElementById('btnComputer').classList.toggle('active', mode === 'computer');
   document.getElementById('btnPhone').classList.toggle('active', mode === 'phone');
-  saveToLocalStorage();
+  // Only save if the survey has actually been started — otherwise we'd spawn
+  // empty localStorage entries on every load and the resume banner would never go away.
+  if (document.getElementById('surveyContainer').style.display === 'block') {
+    saveToLocalStorage();
+  }
 }
 
 // ============================================================
@@ -1493,10 +1497,17 @@ function startFresh() {
   if (window.innerWidth <= 768) setLayout('phone');
   else setLayout('computer');
 
-  // Check for saved data
+  // Check for saved data — only show banner if user actually started a survey
+  // (has real form field keys beyond the _section/_layout/_showIEP metadata)
   const saved = loadFromLocalStorage();
   if (saved) {
-    document.getElementById('savedBanner').style.display = 'block';
+    const realKeys = Object.keys(saved).filter(k => !k.startsWith('_') && saved[k] !== '' && saved[k] !== undefined);
+    if (realKeys.length > 0) {
+      document.getElementById('savedBanner').style.display = 'block';
+    } else {
+      // Stale skeleton — clear it so it doesn't haunt future loads
+      try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
+    }
   }
 })();
 </script>
