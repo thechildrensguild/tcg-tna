@@ -1213,20 +1213,24 @@ function updateCredentials() {
 
   if (siteHint) siteHint.style.display = noSite && role ? '' : 'none';
 
-  const show = (id, val) => { const el = document.getElementById(id); if (el) el.style.display = val ? '' : 'none'; };
+  // cred-group divs have a CSS rule `.cred-group { display: none; }` so we must set
+  // an explicit inline display value to override it when showing. Using '' would
+  // let the CSS default (none) win and keep the element hidden.
+  const showGroup = (id, val) => { const el = document.getElementById(id); if (el) el.style.display = val ? 'flex' : 'none'; };
+  const showLabel = (id, val) => { const el = document.getElementById(id); if (el) el.style.display = val ? '' : 'none'; };
 
-  show('credTeaching', TEACHING_ROLES.includes(role));
-  show('credAdmin', role === 'SCHOOL_ADMIN');
-  show('credRelated', ['SLP','OT','SOCIAL_WORKER','SCHOOL_COUNSELOR'].includes(role));
-  show('credCCCSLP', role === 'SLP');
-  show('credSLPA', role === 'SLP');
-  show('credOTRL', role === 'OT');
-  show('credCOTA', role === 'OT');
-  show('credLCSW', role === 'SOCIAL_WORKER');
-  show('credLICSW', role === 'SOCIAL_WORKER' && (isDC || isMulti || noSite));
-  show('credCounselor', role === 'SCHOOL_COUNSELOR');
-  show('credSchoolCounselor', role === 'SCHOOL_COUNSELOR');
-  show('credBehavior', BEHAVIOR_ROLES.includes(role));
+  showGroup('credTeaching', TEACHING_ROLES.includes(role));
+  showGroup('credAdmin', role === 'SCHOOL_ADMIN');
+  showGroup('credRelated', ['SLP','OT','SOCIAL_WORKER','SCHOOL_COUNSELOR'].includes(role));
+  showLabel('credCCCSLP', role === 'SLP');
+  showLabel('credSLPA', role === 'SLP');
+  showLabel('credOTRL', role === 'OT');
+  showLabel('credCOTA', role === 'OT');
+  showLabel('credLCSW', role === 'SOCIAL_WORKER');
+  showLabel('credLICSW', role === 'SOCIAL_WORKER' && (isDC || isMulti || noSite));
+  showLabel('credCounselor', role === 'SCHOOL_COUNSELOR');
+  showLabel('credSchoolCounselor', role === 'SCHOOL_COUNSELOR');
+  showGroup('credBehavior', BEHAVIOR_ROLES.includes(role));
 
   // When no site picked, show both MD and DC options so user has something selectable
   document.querySelectorAll('.cred-md').forEach(el => { el.style.display = (isMD || isMulti || noSite) ? '' : 'none'; });
