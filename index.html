@@ -413,7 +413,7 @@ const SECTION_INTROS = [
   ""
 ];
 
-const RELATED_SERVICES_ROLES = ['SPED_TEACHER','SOCIAL_WORKER','SLP','OT','SCHOOL_COUNSELOR','SCHOOL_ADMIN'];
+const RELATED_SERVICES_ROLES = ['SPED_TEACHER','SOCIAL_WORKER','SLP','OT','PT','SCHOOL_COUNSELOR','SCHOOL_ADMIN'];
 const TEACHING_ROLES = ['SPED_TEACHER','GEN_ED_TEACHER','TBA','TEACHER_ASST','SCHOOL_ADMIN'];
 const BEHAVIOR_ROLES = ['TBA','SPED_TEACHER','SCHOOL_ADMIN','TEACHER_ASST'];
 
@@ -679,6 +679,7 @@ function buildDemographicsHTML() {
         <option value="SOCIAL_WORKER">School Social Worker</option>
         <option value="SLP">Speech-Language Pathologist</option>
         <option value="OT">Occupational Therapist</option>
+        <option value="PT">Physical Therapist</option>
         <option value="SCHOOL_COUNSELOR">School Counselor</option>
         <option value="SUPPORT_STAFF">Support Staff (Office, Facilities, Transportation)</option>
       </select>
@@ -775,16 +776,60 @@ function buildDemographicsHTML() {
           <label><input type="checkbox" name="Credentials" value="DC_DISTRICT_LEADER"> DC District Leader License</label>
         </div>
       </div>
-      <div class="checkbox-group cred-group" id="credRelated">
-        <div class="field-hint" style="font-weight:600;margin-top:8px;">Related Services Credentials</div>
-        <label id="credCCCSLP" style="display:none;"><input type="checkbox" name="Credentials" value="CCC_SLP"> CCC-SLP</label>
-        <label id="credSLPA" style="display:none;"><input type="checkbox" name="Credentials" value="SLPA"> SLPA (Speech-Language Pathology Assistant)</label>
-        <label id="credOTRL" style="display:none;"><input type="checkbox" name="Credentials" value="OTR_L"> OTR/L (Occupational Therapist)</label>
-        <label id="credCOTA" style="display:none;"><input type="checkbox" name="Credentials" value="COTA"> COTA (Certified OT Assistant)</label>
+      <div class="checkbox-group cred-group" id="credSLP">
+        <div class="field-hint" style="font-weight:600;margin-top:8px;">Speech-Language Pathology Credentials</div>
+        <div class="cred-md" style="display:none;">
+          <label><input type="checkbox" name="Credentials" value="MD_SLP_FULL"> Maryland SLP License (full)</label>
+          <label><input type="checkbox" name="Credentials" value="MD_SLP_CF"> Maryland SLP License with Clinical Fellowship supervision</label>
+          <label><input type="checkbox" name="Credentials" value="MD_SLPA"> Maryland SLPA License</label>
+        </div>
+        <div class="cred-dc" style="display:none;">
+          <!-- NOTE: DC SLPA licensure name has changed in recent years — verify with staff before launch -->
+          <label><input type="checkbox" name="Credentials" value="DC_SLP_FULL"> DC SLP License (full)</label>
+          <label><input type="checkbox" name="Credentials" value="DC_SLP_CF"> DC SLP License with Clinical Fellowship supervision</label>
+          <label><input type="checkbox" name="Credentials" value="DC_SLPA"> DC SLPA License</label>
+        </div>
+        <label><input type="checkbox" name="Credentials" value="CCC_SLP"> ASHA CCC-SLP</label>
+        <label><input type="checkbox" name="Credentials" value="SLP_IN_PROCESS"> In process</label>
+        <label><input type="checkbox" name="Credentials" value="SLP_NOT_HELD"> Not held</label>
+      </div>
+      <div class="checkbox-group cred-group" id="credOT">
+        <div class="field-hint" style="font-weight:600;margin-top:8px;">Occupational Therapy Credentials</div>
+        <div class="cred-md" style="display:none;">
+          <label><input type="checkbox" name="Credentials" value="MD_OT"> Maryland OT License</label>
+          <label><input type="checkbox" name="Credentials" value="MD_OTA"> Maryland OTA License</label>
+        </div>
+        <div class="cred-dc" style="display:none;">
+          <label><input type="checkbox" name="Credentials" value="DC_OT"> DC OT License</label>
+          <label><input type="checkbox" name="Credentials" value="DC_OTA"> DC OTA License</label>
+        </div>
+        <label><input type="checkbox" name="Credentials" value="NBCOT_OTR"> NBCOT OTR certification</label>
+        <label><input type="checkbox" name="Credentials" value="NBCOT_COTA"> NBCOT COTA certification</label>
+        <label><input type="checkbox" name="Credentials" value="OT_IN_PROCESS"> In process</label>
+        <label><input type="checkbox" name="Credentials" value="OT_NOT_HELD"> Not held</label>
+      </div>
+      <div class="checkbox-group cred-group" id="credPT">
+        <div class="field-hint" style="font-weight:600;margin-top:8px;">Physical Therapy Credentials</div>
+        <div class="cred-md" style="display:none;">
+          <label><input type="checkbox" name="Credentials" value="MD_PT"> Maryland PT License</label>
+          <label><input type="checkbox" name="Credentials" value="MD_PTA"> Maryland PTA License</label>
+        </div>
+        <div class="cred-dc" style="display:none;">
+          <label><input type="checkbox" name="Credentials" value="DC_PT"> DC PT License</label>
+          <label><input type="checkbox" name="Credentials" value="DC_PTA"> DC PTA License</label>
+        </div>
+        <label><input type="checkbox" name="Credentials" value="PT_IN_PROCESS"> In process</label>
+        <label><input type="checkbox" name="Credentials" value="PT_NOT_HELD"> Not held</label>
+      </div>
+      <div class="checkbox-group cred-group" id="credSW">
+        <div class="field-hint" style="font-weight:600;margin-top:8px;">Social Work Credentials</div>
         <label id="credLCSW" style="display:none;"><input type="checkbox" name="Credentials" value="LCSW"> LCSW / LCSW-C / LMSW</label>
         <label id="credLICSW" style="display:none;"><input type="checkbox" name="Credentials" value="LICSW"> LICSW / LGSW (DC)</label>
-        <label id="credCounselor" style="display:none;"><input type="checkbox" name="Credentials" value="COUNSELOR_LICENSE"> LGPC / LCPC (Counseling License)</label>
-        <label id="credSchoolCounselor" style="display:none;"><input type="checkbox" name="Credentials" value="SCHOOL_COUNSELING"> School Counseling License</label>
+      </div>
+      <div class="checkbox-group cred-group" id="credCounseling">
+        <div class="field-hint" style="font-weight:600;margin-top:8px;">Counseling Credentials</div>
+        <label><input type="checkbox" name="Credentials" value="COUNSELOR_LICENSE"> LGPC / LCPC (Counseling License)</label>
+        <label><input type="checkbox" name="Credentials" value="SCHOOL_COUNSELING"> School Counseling License</label>
       </div>
       <div class="checkbox-group cred-group" id="credBehavior">
         <div class="field-hint" style="font-weight:600;margin-top:8px;">Behavior Credentials</div>
@@ -1221,15 +1266,13 @@ function updateCredentials() {
 
   showGroup('credTeaching', TEACHING_ROLES.includes(role));
   showGroup('credAdmin', role === 'SCHOOL_ADMIN');
-  showGroup('credRelated', ['SLP','OT','SOCIAL_WORKER','SCHOOL_COUNSELOR'].includes(role));
-  showLabel('credCCCSLP', role === 'SLP');
-  showLabel('credSLPA', role === 'SLP');
-  showLabel('credOTRL', role === 'OT');
-  showLabel('credCOTA', role === 'OT');
+  showGroup('credSLP', role === 'SLP');
+  showGroup('credOT', role === 'OT');
+  showGroup('credPT', role === 'PT');
+  showGroup('credSW', role === 'SOCIAL_WORKER');
   showLabel('credLCSW', role === 'SOCIAL_WORKER');
   showLabel('credLICSW', role === 'SOCIAL_WORKER' && (isDC || isMulti || noSite));
-  showLabel('credCounselor', role === 'SCHOOL_COUNSELOR');
-  showLabel('credSchoolCounselor', role === 'SCHOOL_COUNSELOR');
+  showGroup('credCounseling', role === 'SCHOOL_COUNSELOR');
   showGroup('credBehavior', BEHAVIOR_ROLES.includes(role));
 
   // When no site picked, show both MD and DC options so user has something selectable
